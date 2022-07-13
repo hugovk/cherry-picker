@@ -30,8 +30,6 @@ from .cherry_picker import (
     validate_sha,
 )
 
-# nosec B607 # Disabled as we need to use 'git' in the tests
-
 
 @pytest.fixture
 def config():
