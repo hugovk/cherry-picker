@@ -4,15 +4,15 @@ jobs:
   lint_python:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
         with:
           cache: pip
           cache-dependency-path: .github/workflows/lint_python.yml
       - run: pip install --upgrade pip wheel
-        # TODO: remove setuptools installation when safety==2.4.0 is released
       - run: pip install --upgrade bandit black codespell flake8 flake8-bugbear
-                         flake8-comprehensions isort mypy pyupgrade safety setuptools
+                         flake8-comprehensions isort mypy pyupgrade
+      - run: pip install --upgrade --pre safety
       - run: bandit --recursive --skip B101,B404,B603 .
       - run: black --diff .
       - run: codespell --ignore-words-list="commitish"
