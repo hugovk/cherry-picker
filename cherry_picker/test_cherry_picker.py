@@ -17,7 +17,6 @@ from .cherry_picker import (
     BranchCheckoutException,
     CherryPicker,
     CherryPickException,
-    InvalidRepoException,
     find_config,
     from_git_rev_read,
     get_author_info_from_short_sha,
@@ -447,7 +446,7 @@ Date:   Thu Aug 9 14:25:15 1990 +0000
 def test_is_not_cpython_repo():
     # use default CPython sha to fail on this repo
     with pytest.raises(
-        InvalidRepoException,
+        ValueError,
         match=r"The sha listed in the branch name, "
         r"\w+, is not present in the repository",
     ):
@@ -949,7 +948,7 @@ def test_get_state_and_verify_fail(
     )
     with (
         mock.patch("cherry_picker.cherry_picker.validate_sha", return_value=True),
-        pytest.raises(InvalidRepoException, match=expected_msg_regexp),
+        pytest.raises(ValueError, match=expected_msg_regexp),
     ):
         CherryPicker("origin", "xxx", [])
 
