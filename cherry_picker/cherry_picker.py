@@ -86,10 +86,6 @@ class CherryPickException(Exception):
     pass
 
 
-class InvalidRepoException(Exception):
-    pass
-
-
 class CherryPicker:
 
     ALLOWED_STATES = WORKFLOW_STATES.BACKPORT_PAUSED, WORKFLOW_STATES.UNSET
@@ -117,7 +113,7 @@ class CherryPicker:
         """
 
         self.config = config
-        self.check_repo()  # may raise InvalidRepoException
+        self.check_repo()
 
         """The runtime state loaded from the config.
 
@@ -638,11 +634,8 @@ $ cherry_picker --abort
         This function performs the check by making sure that the sha specified in the config
         is present in the repository that we're operating on.
         """
-        try:
-            validate_sha(self.config["check_sha"])
-            self.get_state_and_verify()
-        except ValueError as ve:
-            raise InvalidRepoException(ve.args[0])
+        validate_sha(self.config["check_sha"])
+        self.get_state_and_verify()
 
     def get_state_and_verify(self):
         """Return the run progress state stored in the Git config.
@@ -789,9 +782,6 @@ def cherry_pick_cli(
             config=config,
             chosen_config_path=chosen_config_path,
         )
-    except InvalidRepoException:
-        click.echo(f"You're not inside a {config['repo']} repo right now! \U0001F645")
-        sys.exit(-1)
     except ValueError as exc:
         ctx.fail(exc)
 
