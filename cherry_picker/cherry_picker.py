@@ -10,17 +10,13 @@ import os
 import re
 import subprocess
 import sys
+import tomllib
 import webbrowser
 
 import stamina
 import urllib3
 
 from . import __version__
-
-if sys.version_info >= (3, 11):
-    import tomllib
-else:
-    import tomli as tomllib
 
 CREATE_PR_URL_TEMPLATE = (
     "https://api.github.com/repos/{config[team]}/{config[repo]}/pulls"
